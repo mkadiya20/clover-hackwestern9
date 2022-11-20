@@ -3,8 +3,10 @@ import TimerStatus from "../interfaces/timerStatus.interface";
 
 export default function EyeTimer(props: TimerStatus) {
     const [second, setSecond] = useState(0);
-    const [minute, setMinute] = useState(20);
+    const [minute, setMinute] = useState(1);
     const [percentage, setPercentage] = useState(0);
+    const [icon, setIcon] = useState("eye1.png");
+    const [whiteIcon, setWhiteIcon] = useState("white_eye1.png");
 
     const totalSeconds = 20 * 60;
 
@@ -17,6 +19,18 @@ export default function EyeTimer(props: TimerStatus) {
 
     useEffect(() => {
         const interval = setInterval(() => {
+            if (percentage >= 75) {
+                setIcon("eye1.png");
+                setWhiteIcon("white_eye1.png");
+            }
+            else if (percentage >= 25 && percentage < 75) {
+                setIcon("eye2.png");
+                setWhiteIcon("white_eye2.png");
+            }
+            else if (percentage < 25) {
+                setIcon("eye3.png");
+                setWhiteIcon("white_eye3.png");
+            }
             if (percentage <= 0) {
                 props.setStatus("Rest your eyes!")
             }
@@ -43,8 +57,8 @@ export default function EyeTimer(props: TimerStatus) {
             <div className="flex w-24 h-24 rounded-2xl border-2 border-[#505050]
                 hover:bg-[#9EDEA1]"
                 onClick={(e) => onClick(e)}>
-                    <img src="/eye1.png" className="flex w-full h-full p-2 hover:opacity-0"></img>
-                    <img src="/white_eye1.png" className="relative flex w-full h-full p-2 right-[92px] opacity-0 hover:opacity-100"></img>
+                    <img src={icon} className="flex w-full h-full p-2 hover:opacity-0"></img>
+                    <img src={whiteIcon} className="relative flex w-full h-full p-2 right-[92px] opacity-0 hover:opacity-100"></img>
             </div>
             <div className="flex w-24 h-10 rounded-2xl border-2 border-[#505050] items-center justify-center
                 text-3xl text-primary bg-secondary">

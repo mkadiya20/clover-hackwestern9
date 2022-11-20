@@ -1,11 +1,11 @@
-export default interface IQueue<T> {
+interface IQueue<T> {
     enqueue(item: T): void;
     dequeue(): T | undefined;
     size(): number;
 }
 
 
-class Queue<T> implements IQueue<T> {
+export class Queue<T> implements IQueue<T> {
     private storage: T[] = [];
   
     constructor(private capacity: number = Infinity) {}
@@ -25,7 +25,7 @@ class Queue<T> implements IQueue<T> {
   }
 
 
-class Cycle{
+export class Cycle{
     constructor(public id:number, public duration: number, public isPOM: boolean){
         this.id = id;
         this.duration = duration;
@@ -39,7 +39,11 @@ function arrayMerge(test: Array<number>){
 }
 
 //Function to calculate total time in a user's cycle once they hit the "Start" button and begin to work
-function timeCalculation(schedule: Array<any>) {
+export function timeCalculation(schedule: Array<any>) {
+    schedule = schedule.filter((item) => {
+        return !(item.row === -1);
+    })
+    console.log(schedule);
     const currentDate = new Date(); 
     const currentDay = currentDate.getDay();
     const currentHour = currentDate.getHours();
@@ -51,7 +55,7 @@ function timeCalculation(schedule: Array<any>) {
     // console.log(schedule);
     //iterate through schedule input
     for (var i in schedule) {
-        console.log(i);
+        // console.log(i);
 
         //sort all the elements in the input array, strip extra elements
         if (schedule[i].column == 'Mon') {
@@ -140,11 +144,11 @@ function timeCalculation(schedule: Array<any>) {
             index=parseInt(i);
         }
     }
-    startTime = listofTuples[currentDay][index][0]
+    // startTime = listofTuples[currentDay][index][0]
     // console.log("start time: ", startTime)
 
     //calculate total time
-    var totalTime = ( (listofTuples[currentDay][index][1] - listofTuples[currentDay][index][1] +1) * 30 * 60);
+    var totalTime = ( (listofTuples[currentDay][index][1] - listofTuples[currentDay][index][0] +1) * 30 * 60);
     
     // // //if starting time is within work interval, user started late. Subtract total time by time they are late.
     // // if( listofDays[currentDay][index][0]< currentValue < listofDays[currentDay][index][1]){
@@ -170,7 +174,7 @@ function timeCalculation(schedule: Array<any>) {
 
 //QUEUE STILL BROKEN BTW NOT CATCHING EXCEPTS
 //Function to queue cycles of POM/REST/REST+ based on total time of a work block given by user
-function queueCycles(totalTime: number){ 
+export function queueCycles(totalTime: number){ 
     
     //track cycle number; odds are POM cycles, evens are REST cycles
     let cycleNum=0;
@@ -246,12 +250,12 @@ void function internalTimer(cycleQueue: Queue<Cycle>){
     }
 }
 
-let test = queueCycles(10601);
+// let test = queueCycles(10601);
 
-for(let i =0; i <10; i++){
-    console.log(test.dequeue());
+// for(let i =0; i <10; i++){
+//     console.log(test.dequeue());
 
-}
+// }
 
 
 // var test = [{ row: 0, column: "Mon" },

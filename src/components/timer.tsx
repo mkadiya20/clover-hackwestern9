@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
+import InternalTimer from "../interfaces/internalTimer.interface";
 
-export default function Timer() {
+export default function Timer(props: InternalTimer) {
     const [second, setSecond] = useState(0);
     const [minute, setMinute] = useState(25);
 

@@ -6,17 +6,17 @@ import ISplit from "./interfaces/split.interface";
 import EyeTimer from "./components/eyeTimer";
 import WaterTimer from "./components/waterTimer";
 import PostureTimer from "./components/postureTimer";
+import { timeCalculation, queueCycles, Queue, Cycle } from "./backend";
 
 export default function App() {
-  const [isMainSelected, setIsMainSelected] = useState(true);
+  const [isMainSelected, setIsMainSelected] = useState(false);
   const [startTime, setStartTime] = useState(9);
   const [endTime, setEndTime] = useState(17);
   const [schedule, setSchedule] = useState<[ISplit]>([{row: -1, column: "mon"}]);
   const [reset, setReset] = useState(false);
   const [status, setStatus] = useState("idle");
-
-  const colArray = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-  const rowArray = [0, 1, 2, 3, 4, 5, 6, 7];
+  const [internalTimer, setInternalTimer] = useState(0);
+  const [cycles, setCycles] = useState<Queue<Cycle>>();
 
   const onFormClick = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -38,6 +38,23 @@ export default function App() {
     setIsMainSelected(true);
   }
 
+  useEffect(() => {
+    if (isMainSelected) {
+      const totalTime = timeCalculation(schedule);
+      const cycles = queueCycles(totalTime);
+      const duration = cycles.dequeue()?.duration;
+      setCycles(cycles);
+      setInternalTimer(duration as number);
+    }
+  }, [isMainSelected]);
+
+  useEffect(() => {
+    if (internalTimer <= 0) {
+      const duration = cycles?.dequeue()?.duration;
+      setInternalTimer(duration as number);
+    }
+  }, [internalTimer]);
+
   return (
     <div>
       {isMainSelected ? (
@@ -47,7 +64,8 @@ export default function App() {
         <div className="relative flex w-2/3 h-12 rounded-2xl text-primary font-bold text-4xl top-2 bg-secondary m-auto items-center justify-center">
           <span>{status}</span>
         </div>
-        <Timer />
+        <Timer internalTimer={internalTimer}
+          setInternalTimer={setInternalTimer}/>
         <div className="flex flex-row w-full h-40 mb-auto space-x-16 items-center justify-center">
           <EyeTimer status={status}
             setStatus={setStatus} />

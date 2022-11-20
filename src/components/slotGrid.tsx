@@ -5,7 +5,7 @@ import WorkTime from "../interfaces/workTime.interface";
 import ISchedule from "../interfaces/schedule.interface";
 
 export default function SlotGrid(props: WorkTime & ISchedule) {
-    const colArray = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+    const colArray = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const rowArray: number[] = [];
 
     const [mouseDown, setMouseDown] = useState(false);
