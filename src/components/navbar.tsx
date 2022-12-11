@@ -1,15 +1,15 @@
 import { MouseEvent } from "react"
 import MainSelected from "../interfaces/mainSelected.interface"
 
-export default function NavBar(props: MainSelected) {
+export default function NavBar(props: MainSelected & { theme: string}) {
 
     const onClick = (e: MouseEvent<HTMLImageElement, globalThis.MouseEvent>) => {
         e.preventDefault();
-        props.setMainSelected(false);
+        props.setMainSelected(!props.mainSelected);
     }
 
     return (
-        <div className="flex flex-row w-full h-20 bg-secondary">
+        <div className={`transition-colors delay-30 flex flex-row w-full h-20 bg-secondary-${props.theme}`}>
             <div className="flex w-1/2 h-full items-center gap-x-2 pl-5">
                 <img src="/clover.png" className="relative flex w-16 h-16"></img>
                 <span className="relative flex w-56 h-full text-5xl font-bold text-[#DCFFDE] top-3">CLOVER</span>
