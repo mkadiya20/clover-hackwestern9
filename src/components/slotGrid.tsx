@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Slot from "./slot";
-import ISplit from "../interfaces/split.interface";
 import WorkTime from "../interfaces/workTime.interface";
 import ISchedule from "../interfaces/schedule.interface";
 

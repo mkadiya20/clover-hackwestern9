@@ -2,25 +2,24 @@ import { MouseEvent, useEffect, useState } from "react"
 import MouseDown from "../interfaces/mouseDown.interface";
 import SplitPosition from "../interfaces/splitPosition.interface";
 import ISchedule from "../interfaces/schedule.interface";
-import ISplit from "../interfaces/split.interface";
 
 export default function Split(props: MouseDown & SplitPosition & ISchedule) {
-
+    const { row, column, schedule, setSchedule } = props;
     const [selected, setSelected] = useState(false);
 
     useEffect(() => {
         // add to schedule array
         if (selected) {
-            props.setSchedule([...props.schedule, {row: props.row, column: props.column}]);
+            setSchedule([...schedule, {row: row, column: column}]);
         }
 
         // remove from schedule array
         else {
-            props.setSchedule(props.schedule.filter((item) => {
-                return !(item.row === props.row && item.column === props.column);
+            setSchedule(schedule.filter((item) => {
+                return !(item.row === row && item.column === column);
             }));
         }
-    }, [selected]);
+    }, [row, column, schedule, setSchedule, selected]);
 
 
     const onClick = (event: MouseEvent<HTMLDivElement>) => {

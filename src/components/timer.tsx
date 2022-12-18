@@ -17,6 +17,8 @@ export default function Timer(props: ITimer & ITheme) {
     const [minute, setMinute] = useState(props.minute);
     const [state, setState] = useState("work");
 
+    const { theme, setTheme } = props;
+
     let formattedNumber = (number: any): string => {
         return number.toLocaleString('en-US', {
             minimumIntegerDigits: 2,
@@ -31,12 +33,12 @@ export default function Timer(props: ITimer & ITheme) {
                     setMinute(5);
                     setSecond(0);
                     setState("rest");
-                    props.setTheme("blue");
+                    setTheme("blue");
                 } else {
                     setMinute(25);
                     setSecond(0);
                     setState("work");
-                    props.setTheme("green");
+                    setTheme("green");
                 }
             }
             else if (second <= 0) {
@@ -51,21 +53,23 @@ export default function Timer(props: ITimer & ITheme) {
         }, 1000)
 
         return () => clearInterval(interval);
-    }, [second, minute]);
+    }, [second, minute, state, setTheme]);
     
-    const tailwindCondition = (state: string): string => {
-        if (state === "work") {
-            return `text-secondary-${props.theme} hover:bg-light_${props.theme}`;
-        } else {
-            return "text-secondary- hover:bg-[#74aced]";
-        }
-    }
+    // const tailwindCondition = (theme: string): string => {
+    //     if (theme === "green") {
+    //         return "text-secondary-green hover:bg-secondary-light_green";
+    //     } else if (theme === "blue") {
+    //         return "text-secondary-blue hover:bg-secondary-light_blue";
+    //     } else {
+    //         return "text-secondary-red hover:bg-secondary-light_red";
+    //     }
+    // }
 
     // props.setTheme("red");
 
     return (
         <div className={`transition-colors delay-30 flex w-80 h-32 bg-primary border-2 m-auto border-[#505050]
-            rounded-2xl text-secondary-${props.theme} hover:bg-secondary-light_${props.theme} hover:text-primary items-center justify-center`}>
+            rounded-2xl text-secondary-${theme} hover:bg-secondary-light_${theme} hover:text-primary items-center justify-center`}>
                 <button className="text-8xl">
                         {formattedNumber(minute)}:{formattedNumber(second)}
                 </button>

@@ -1,7 +1,6 @@
 import Split from "./split"
 import MouseDown from "../interfaces/mouseDown.interface"
 import SlotPosition from "../interfaces/slotPosition.interface"
-import CSlot from "../interfaces/slot.interface"
 import ISchedule from "../interfaces/schedule.interface"
 
 export default function Slot(props: MouseDown & SlotPosition & ISchedule) {

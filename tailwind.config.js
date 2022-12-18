@@ -8,7 +8,7 @@ module.exports = {
         secondary: {
           green: "#40AC7F",
           light_green: "#9EDEA1",
-          blue: "#3134e8",
+          blue: "#2278f0",
           light_blue: "#74aced",
           red: "#e02232",
           light_red: "#eb5965"
