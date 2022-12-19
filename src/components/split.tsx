@@ -19,7 +19,7 @@ export default function Split(props: MouseDown & SplitPosition & ISchedule) {
                 return !(item.row === row && item.column === column);
             }));
         }
-    }, [row, column, schedule, setSchedule, selected]);
+    }, [row, column, setSchedule, selected]);
 
 
     const onClick = (event: MouseEvent<HTMLDivElement>) => {
@@ -35,28 +35,12 @@ export default function Split(props: MouseDown & SplitPosition & ISchedule) {
 
     const onMouseDown = (e: MouseEvent<HTMLDivElement>) => {
         props.setMouseDown(true);
-        const split = e.currentTarget;
-        const color = split.style.backgroundColor;
-        if (color === "green") {
-            split.style.backgroundColor = "white";
-            setSelected(false);
-        } else {
-            split.style.backgroundColor = "green";
-            setSelected(true);
-        }
+        setSelected(!selected);
     }
 
     const onMouseEnter = (e: MouseEvent<HTMLDivElement>) => {
-        const split = e.currentTarget;
         if (props.mouseDown) {
-            const color = split.style.backgroundColor;
-            if (color === "green") {
-                split.style.backgroundColor = "white";
-                setSelected(false);
-            } else {
-                split.style.backgroundColor = "green";
-                setSelected(true);
-            }
+            setSelected(!selected);
         }
     }
 
@@ -66,11 +50,12 @@ export default function Split(props: MouseDown & SplitPosition & ISchedule) {
     }
 
     return (
-        <div className="relative flex w-full h-full bg-opacity-0"
+        <td className={`border-2 border-black ${selected ? "bg-secondary-green" : "bg-primary"}`}
+            key={row + column}
             onClick={e => onClick(e)}
             onMouseDown={e => onMouseDown(e)}
             onMouseEnter={e => onMouseEnter(e)}
             onMouseUp={e => onMouseUp(e)}>
-        </div>
+        </td>
     )
 }

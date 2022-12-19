@@ -1,28 +1,16 @@
 import Timer from "./components/timer";
 import SlotGrid from "./components/slotGrid";
-import { FormEvent, MouseEvent, useEffect, useState } from "react";
+import React, { FormEvent, MouseEvent, ReactElement, useEffect, useState } from "react";
 import NavBar from "./components/navbar";
 import ISplit from "./interfaces/split.interface";
 import { timeCalculation, queueCycles, Queue, Cycle } from "./backend";
 import InternalTimer from "./components/internalTimer";
+import {
+  initialTimerSecond, initialTimerMinute,
+  initialInternalTimerSecond, initialInternalTimerMinute
+} from "./utilities/storage";
 
 export default function App() {
-  const initialTimerMinute = () => {
-    const initialMinute = localStorage.getItem("timerMinute");
-    if (initialMinute) {
-      return parseInt(initialMinute);
-    }
-    return 20;
-  }
-
-  const initialTimerSecond = () => {
-    const initialSecond = localStorage.getItem("timerSecond");
-    if (initialSecond) {
-      return parseInt(initialSecond);
-    }
-    return 0;
-  }
-
   const [isMainSelected, setIsMainSelected] = useState(false);
   const [startTime, setStartTime] = useState(9);
   const [endTime, setEndTime] = useState(17);
@@ -33,13 +21,10 @@ export default function App() {
   const [timerMinute, setTimerMinute] = useState(initialTimerMinute());
   const [timerSecond, setTimerSecond] = useState(initialTimerSecond());
   const [cycles, setCycles] = useState<Queue<Cycle>>();
+  const [test, setTest] = useState<boolean[][]>([]);
 
-  const ltimerMinute = localStorage.getItem("timerMinute") || "not set";
-  const ltimerSecond = localStorage.getItem("timerSecond") || "not set";
-  console.log(ltimerMinute);
-  console.log(ltimerSecond);
-  const eyeMinutes = 20;
-  const waterMinutes = 20;
+  const eyeMinutes = 15;
+  const waterMinutes = 10;
   const postureMinutes = 20;
 
   const eyeDefaultIcons = ["eye1.png","eye2.png","eye3.png"];
@@ -86,15 +71,14 @@ export default function App() {
   //   }
   // }, [timer]);
 
-  console.log(`bg-secondary-${theme}`);
-
   return (
     <div>
       {isMainSelected ? (
       <div className={`flex flex-col w-[600px] h-[500px] text-black bg-primary`}>
         <NavBar mainSelected={isMainSelected}
           setMainSelected={setIsMainSelected}
-          theme={theme}/>
+          theme={theme}
+          setTheme={setTheme}/>
         <div className={`relative flex w-2/3 h-12 rounded-2xl text-primary font-bold text-4xl top-2 bg-secondary-${theme} m-auto items-center justify-center`}>
           <span>{status}</span>
         </div>
@@ -105,21 +89,27 @@ export default function App() {
           theme={theme}
           setTheme={setTheme} />
         <div className="flex flex-row w-full h-40 mb-auto space-x-16 items-center justify-center">
-          <InternalTimer status={status}
+          <InternalTimer
+            name={"Eye"}
+            status={status}
             setStatus={setStatus}
             second={0}
             minute={eyeMinutes}
             default_icons={eyeDefaultIcons}
             white_icons={eyeWhiteIcons}
             theme={theme} />
-          <InternalTimer status={status}
+          <InternalTimer
+            name={"Water"}
+            status={status}
             setStatus={setStatus}
             second={0}
             minute={waterMinutes}
             default_icons={dropDefaultIcons}
             white_icons={dropWhiteIcons}
             theme={theme} />
-          <InternalTimer status={status}
+          <InternalTimer
+            name={"Posture"}
+            status={status}
             setStatus={setStatus}
             second={0}
             minute={postureMinutes}
@@ -132,8 +122,9 @@ export default function App() {
         <div className={`flex flex-col w-[800px] h-[600px] bg-primary`}>
           <NavBar mainSelected={isMainSelected}
             setMainSelected={setIsMainSelected}
-            theme={theme}/>
-          <div className={`relative flex w-2/3 h-14 rounded-2xl bg-secondary-${theme} top-5 ml-10 items-center`}>
+            theme={theme}
+            setTheme={setTheme}/>
+          {/* <div className={`relative flex w-2/3 h-14 rounded-2xl bg-secondary-${theme} top-5 ml-10 items-center`}>
             <span className="relative flex text-[#DCFFDE] text-3xl left-2">What time do you work?</span>
             <form onSubmit={(e) => onFormClick(e)} className="flex flex-row items-center">
               <input type="number" name="start" className="relative flex w-14 h-7 left-5 rounded-lg text-center bg-[#DCFFDE] focus:outline-none active:outline-none"></input>
@@ -142,12 +133,14 @@ export default function App() {
               <input type="submit" className={`relative flex w-20 h-[52px] left-40 text-[#DCFFDE] items-center bg-secondary-${theme} rounded-lg justify-center`}
                 ></input>
             </form>
-          </div>
+          </div> */}
           <SlotGrid startTime={startTime}
             endTime={endTime}
             schedule={schedule}
             setSchedule={setSchedule}
             resetSchedule={reset}
+            test={test}
+            setTest={setTest}
           />
           <div className="flex flex-row items-center justify-center mb-5">
             <button className={`flex w-24 h-12 m-auto rounded-2xl text-2xl font-bold text-[#DCFFDE] bg-secondary-${theme} items-center justify-center`}

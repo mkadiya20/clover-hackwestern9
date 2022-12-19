@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react'
+import {
+    storeInternalTimer, initialInternalTimerMinute, initialInternalTimerSecond,
+} from '../utilities/storage';
 
 interface IInternalTimer {
+    name: string
     status: string,
     setStatus: Function,
     second: number,
@@ -10,14 +14,14 @@ interface IInternalTimer {
 }
 
 export default function InternalTimer(props: IInternalTimer & { theme: string }) {
-    const [second, setSecond] = useState(props.second);
-    const [minute, setMinute] = useState(props.minute);
+    const [second, setSecond] = useState(initialInternalTimerSecond(props.name) || props.second);
+    const [minute, setMinute] = useState(initialInternalTimerMinute(props.name) || props.minute);
     const [percentage, setPercentage] = useState(100);
     const [icon, setIcon] = useState(props.default_icons[0]);
     const [whiteIcon, setWhiteIcon] = useState(props.white_icons[0]);
     const [isHovered, setIsHovered] = useState(false);
 
-    const { status, setStatus, default_icons, white_icons } = props;
+    const { name, status, setStatus, default_icons, white_icons } = props;
 
     const totalSeconds = (props.minute * 60) + props.second;
 
@@ -69,9 +73,11 @@ export default function InternalTimer(props: IInternalTimer & { theme: string })
             }
             const currentSeconds = minute * 60 + second;
             setPercentage(Math.floor((currentSeconds / totalSeconds) * 100));
+
+            storeInternalTimer(name, minute, second);
         }, 1000);
         return () => clearInterval(interval);
-    }, [second, minute, totalSeconds, percentage, status, setStatus, default_icons, white_icons]);
+    }, [second, minute, name, totalSeconds, percentage, status, setStatus, default_icons, white_icons]);
 
     // console.log(`bg-secondary-light_${props.theme}`);
 
@@ -99,6 +105,13 @@ export default function InternalTimer(props: IInternalTimer & { theme: string })
     //     }
     // }
 
+    const formattedNumber = (number: any): string => {
+        return number.toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+        })
+    }
+
     return (
         <div className="flex flex-col space-y-3">
             <div className={`transition-colors delay-30 flex w-24 h-24 rounded-2xl border-2 border-[#505050]
@@ -114,8 +127,8 @@ export default function InternalTimer(props: IInternalTimer & { theme: string })
             </div>
             <div className={`transition-colors delay-30 flex w-24 h-10 rounded-2xl border-2 border-[#505050] items-center justify-center
                 text-3xl text-primary bg-secondary-${props.theme}`}>
-                {percentage}%
-                {/* {formattedNumber(minute)}:{formattedNumber(second)} */}
+                {/* {percentage}% */}
+                {formattedNumber(minute)}:{formattedNumber(second)}
             </div>
         </div>
     )

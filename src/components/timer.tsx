@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { storeTimer } from "../utilities/storage";
 
 interface ITimer {
     minute: number;
@@ -19,7 +20,7 @@ export default function Timer(props: ITimer & ITheme) {
 
     const { theme, setTheme } = props;
 
-    let formattedNumber = (number: any): string => {
+    const formattedNumber = (number: any): string => {
         return number.toLocaleString('en-US', {
             minimumIntegerDigits: 2,
             useGrouping: false
@@ -48,8 +49,7 @@ export default function Timer(props: ITimer & ITheme) {
                 setSecond(second-1)
             }
 
-            localStorage.setItem("timerMinute", minute.toString());
-            localStorage.setItem("timerSecond", second.toString());
+            storeTimer(minute, second);
         }, 1000)
 
         return () => clearInterval(interval);
